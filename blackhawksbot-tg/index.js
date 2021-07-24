@@ -25,7 +25,7 @@ bot.on('message', (msg) => {
     const nextMatch = new NextMatch()
 
     nextMatch.sumMatchInfo().then((res) => {
-      
+      bot.sendMessage(chatId, res)
     })
   }
 })
