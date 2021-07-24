@@ -1,4 +1,4 @@
-const Match = require('./match')
+const Match = require('./Match')
 
 class PreviousMatch extends Match {
   constructor () {
@@ -15,30 +15,6 @@ class PreviousMatch extends Match {
     console.log(this.response.data.link)
     return this.answer
     // return this.response.homeTeam
-  }
-
-  test() {
-    console.log(this.status)
-
-    // this.scores = await axios
-    // .get(`https://statsapi.web.nhl.com${response.link}`)
-    // .then(res => {
-    //   const gameReview = res.data.liveData
-    //   gameReview.plays.scoringPlays.forEach((play) => {
-    //     obsPlay = gameReview.plays.allPlays[play]
-    //     answer =
-    //       answer +
-    //       `${obsPlay.about.goals.home}:${obsPlay.about.goals.away} — ${
-    //         obsPlay.players[0].player.fullName
-    //       } (${obsPlay.players[0].seasonTotal})${
-    //         obsPlay.result.description.split('assists: ')[1].length > 0
-    //           ? `; Передачи: ${
-    //               obsPlay.result.description.split('assists: ')[1]
-    //             }`
-    //           : ' '
-    //       }\n`
-    //   })
-    // })
   }
 }
 
