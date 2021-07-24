@@ -2,22 +2,10 @@ const TelegramBot = require('node-telegram-bot-api')
 const token = require('./config/config')
 
 const PreviousMatch = require('./modules/previousMatch')
+const NextMatch = require('./modules/nextMatch')
 
 const bot = new TelegramBot(token, {
   polling: true,
-})
-
-// Matches "/echo [whatever]"
-bot.onText(/\/echo (.+)/, (msg, match) => {
-  // 'msg' is the received Message from Telegram
-  // 'match' is the result of executing the regexp above on the text content
-  // of the message
-
-  const chatId = msg.chat.id
-  const resp = match[1] // the captured "whatever"
-
-  // send back the matched "whatever" to the chat
-  bot.sendMessage(chatId, resp)
 })
 
 // Listen for any kind of message. There are different kinds of
@@ -25,11 +13,19 @@ bot.onText(/\/echo (.+)/, (msg, match) => {
 bot.on('message', (msg) => {
   const chatId = msg.chat.id
 
-  if (msg.text.toString().toLowerCase() == '/prevmatch') {
+  if (msg.text.toString().toLowerCase().includes('prevmatch')) {
     const prevMatch = new PreviousMatch()
 
     prevMatch.sumMatchInfo().then((res) => {
       bot.sendMessage(chatId, res)
+    })
+  }
+
+  if (msg.text.toString().toLowerCase().includes('nextmatch')) {
+    const nextMatch = new NextMatch()
+
+    nextMatch.sumMatchInfo().then((res) => {
+      
     })
   }
 })
