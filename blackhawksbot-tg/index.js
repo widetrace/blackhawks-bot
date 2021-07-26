@@ -1,7 +1,7 @@
 const TelegramBot = require('node-telegram-bot-api')
 const token = require('./config/config')
 
-const PreviousMatch = require('./modules/previousMatch')
+const PreviousMatch = require('../modules/previousMatch')
 const NextMatch = require('./modules/nextMatch')
 
 const bot = new TelegramBot(token, {
