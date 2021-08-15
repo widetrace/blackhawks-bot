@@ -1,8 +1,9 @@
 const Match = require('./Match')
 
 class PreviousMatch extends Match {
-  constructor () {
+  constructor() {
     super('previous')
+    this.SCORES_LINK = null
   }
 
   async sumMatchInfo() {
