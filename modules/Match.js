@@ -4,7 +4,6 @@ class Match {
   constructor(status) {
     this.MAIN_URL = 'https://statsapi.web.nhl.com'
     this.MATCH_LINK = `/api/v1/teams/16?expand=team.schedule.${status}`
-    // this.SCORES_LINK = null -- in previous match only
 
     this.status = status
 
