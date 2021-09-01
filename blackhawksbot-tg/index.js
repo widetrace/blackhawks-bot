@@ -10,15 +10,15 @@ const bot = new TelegramBot(token, {
 
 // Listen for any kind of message. There are different kinds of
 // messages.
-bot.on('message', (msg) => {
+bot.on('message', async (msg) => {
   const chatId = msg.chat.id
 
   if (msg.text.toString().toLowerCase().includes('prevmatch')) {
     const prevMatch = new PreviousMatch()
 
-    prevMatch.sumMatchInfo().then((res) => {
-      bot.sendMessage(chatId, res)
-    })
+    const answer = await prevMatch.getAnswer()
+
+    bot.sendMessage(chatId, answer)
   }
 
   if (msg.text.toString().toLowerCase().includes('nextmatch')) {

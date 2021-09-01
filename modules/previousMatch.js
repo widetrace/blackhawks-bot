@@ -11,20 +11,19 @@ class PreviousMatch extends Match {
   async sumMatchInfo() {
     await super.sumMatchInfo()
     this.SCORES_LINK = this.response.data.link
+    this.MATCH_SCORE = await this.getMatchScores()
+  }
 
-    const scores = await this.getMatchScores()
+  async getAnswer() {
+    await this.sumMatchInfo()
 
-    const homeTeamData = this.response.homeTeam
-    const awayTeamData = this.response.awayTeam
-
-    this.answer = `🏒 ${homeTeamData.team.name} ${
-      homeTeamData.score > awayTeamData.score ? 'defeated' : 'lost to'
-    } ${awayTeamData.team.name} \n\n`
-    this.answer =
-      this.answer + `🔔 Scores: ${homeTeamData.score}:${awayTeamData.score}\n\n`
-    this.answer = this.answer + scores
-
-    return this.answer
+    return `🏒 ${this.response.homeTeam.team.name} ${
+      this.response.homeTeam.score > this.response.awayTeam.score
+        ? 'defeated'
+        : 'lost to'
+    } ${this.response.awayTeam.team.name}\n\n🔔 Scores: ${
+      this.response.homeTeam.score
+    }:${this.response.awayTeam.score}\n\n ${this.MATCH_SCORE}`
   }
 
   async getMatchScores() {
@@ -35,17 +34,17 @@ class PreviousMatch extends Match {
 
         gameReview.plays.scoringPlays.forEach((play) => {
           const obsPlay = gameReview.plays.allPlays[play]
-          answer =
-            answer +
-            `🚨 ${obsPlay.about.goals.home}:${obsPlay.about.goals.away} — ${
-              obsPlay.players[0].player.fullName
-            } (${obsPlay.players[0].seasonTotal})${
-              obsPlay.result.description.split('assists: ')[1].length > 0
-                ? `; Передачи: ${
-                    obsPlay.result.description.split('assists: ')[1]
-                  }`
-                : ' '
-            }\n`
+          answer += `🚨 ${obsPlay.about.goals.home}:${
+            obsPlay.about.goals.away
+          } — ${obsPlay.players[0].player.fullName} (${
+            obsPlay.players[0].seasonTotal
+          })${
+            obsPlay.result.description.split('assists: ')[1].length > 0
+              ? `; Передачи: ${
+                  obsPlay.result.description.split('assists: ')[1]
+                }`
+              : ' '
+          }\n`
         })
 
         return answer

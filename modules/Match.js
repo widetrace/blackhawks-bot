@@ -38,7 +38,7 @@ class Match {
     }
   }
 
-  getMainInfo() {}
+  getAnswer() {}
 }
 
 module.exports = Match
