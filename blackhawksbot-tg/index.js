@@ -12,20 +12,19 @@ const bot = new TelegramBot(token, {
 // messages.
 bot.on('message', async (msg) => {
   const chatId = msg.chat.id
+  let answer = ''
 
   if (msg.text.toString().toLowerCase().includes('prevmatch')) {
     const prevMatch = new PreviousMatch()
 
-    const answer = await prevMatch.getAnswer()
-
-    bot.sendMessage(chatId, answer)
+    answer = await prevMatch.getAnswer()
   }
 
   if (msg.text.toString().toLowerCase().includes('nextmatch')) {
     const nextMatch = new NextMatch()
 
-    nextMatch.sumMatchInfo().then((res) => {
-      bot.sendMessage(chatId, res)
-    })
+    answer = await nextMatch.getAnswer()
   }
+
+  bot.sendMessage(chatId, answer)
 })
