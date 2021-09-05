@@ -1,20 +1,28 @@
 class Formatter {
+  constructor() {
+    this.match = null;
+  }
+
   format(status, match) {
-    if (status === 'previous') {
-      return this.previous(match);
+    this.match = match;
+
+    if (status === 'Previous' && this.match.score) {
+      return this.previous();
     }
-    if (status === 'next') {
-      return this.next(match);
+
+    if (status === 'Next') {
+      return this.next();
     }
+
     return 'Smth goes wrong';
   }
 
-  static previous(match) {
-    return `🏒  ${match}`;
+  previous() {
+    return `🏒  ${this.match}`;
   }
 
-  static next(match) {
-    return `🏒  ${match}`;
+  next() {
+    return `🏒  ${this.match}`;
   }
 }
 
