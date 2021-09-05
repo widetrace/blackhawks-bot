@@ -25,7 +25,8 @@ class Formatter {
 
   previous() {
     return `🏒 ${this.homeTeamName} ${this.match.homeTeam.score > this.match.awayTeam.score ? 'defeated' : 'lost to'} ${this.awayTeamName} \n
-    🔔 Scores:\n ${this.scoreLine()}`;
+    🔔 Scores:\n ${this.createScoreLine()}\n
+    Stars: ${this.createStarLine()}`;
   }
 
   next() {
@@ -36,20 +37,22 @@ class Formatter {
     ⏰ Time: ${matchDate[1]}`;
   }
 
-  scoreLine() {
+  createScoreLine() {
     let answer = '';
     this.match.score.forEach((play) => {
       answer += `🚨 ${play.stat} — ${play.scorer}(${play.scorerGoalsTotal}); Assists: ${play.assistants}\n`;
     });
     return answer;
   }
+
+  createStarLine() {
+    let answer = '';
+    const starEmoji = '⭐';
+    this.match.stars.forEach((star, index) => {
+      answer += `${starEmoji.repeat(index + 1)} ${star.fullName}; `;
+    });
+    return answer;
+  }
 }
 
 module.exports = Formatter;
-
-// {
-//     stat: '2:1',
-//     scorer: 'Joe Pavelski',
-//     scorerGoalsTotal: 25,
-//     assistants: 'John Klingberg (27), Joel Hanley (8)'
-//   },

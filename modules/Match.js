@@ -10,6 +10,7 @@ class Match {
       homeTeam: null,
       awayTeam: null,
       score: [],
+      stars: [],
     };
   }
 
@@ -39,6 +40,10 @@ class Match {
     try {
       return axios.get(this.MAIN_URL + this.response.data.link).then((res) => {
         const gameReview = res.data.liveData.plays;
+
+        const { firstStar, secondStar, thirdStar } = res.data.liveData.decisions;
+
+        this.response.stars = [firstStar, secondStar, thirdStar];
 
         gameReview.scoringPlays.forEach((play) => {
           const obsPlay = gameReview.allPlays[play];
