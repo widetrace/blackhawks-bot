@@ -1,8 +1,13 @@
 const TelegramBot = require('node-telegram-bot-api');
 const token = require('./config/config');
 
-const PreviousMatch = require('../modules/previousMatch');
-const NextMatch = require('../modules/nextMatch');
+const Match = require('../modules/Match');
+const Formatter = require('../modules/Formatter');
+const Processor = require('../modules/Processor');
+
+const match = new Match();
+const formatter = new Formatter();
+const processor = new Processor();
 
 const bot = new TelegramBot(token, {
   polling: true,
@@ -15,15 +20,15 @@ bot.on('message', async (msg) => {
   let answer = '';
 
   if (msg.text.toString().toLowerCase().includes('prevmatch')) {
-    const prevMatch = new PreviousMatch();
-
-    answer = await prevMatch.getAnswer();
+    answer = await processor.sumInfo(match, formatter, 'previous');
   }
 
   if (msg.text.toString().toLowerCase().includes('nextmatch')) {
-    const nextMatch = new NextMatch();
+    answer = await processor.sumInfo(match, formatter, 'next');
+  }
 
-    answer = await nextMatch.getAnswer();
+  if (!answer) {
+    bot.sendMessage(chatId, 'repeat');
   }
 
   bot.sendMessage(chatId, answer);
