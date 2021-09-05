@@ -15,32 +15,40 @@ class Match {
 
   fetchInfo(status) {
     try {
-      axios.get(this.MAIN_URL + this.MATCH_LINK + status).then(async (res) => {
-        const response = res.data.teams[0][`${status}GameSchedule`].dates[0].games[0];
-        this.response.data = response;
-        this.response.homeTeam = response.teams.home;
-        this.response.awayTeam = response.teams.away;
-        if (status === 'previous') {
-          await this.fetchScore;
-        }
-        return response;
-      });
+      return axios.get(this.MAIN_URL + this.MATCH_LINK + status)
+        .then(async (res) => {
+          const response = res.data.teams[0][`${status}GameSchedule`].dates[0].games[0];
+          this.response.data = response;
+          this.response.homeTeam = response.teams.home;
+          this.response.awayTeam = response.teams.away;
+          if (status === 'previous') {
+            await this.fetchScore();
+          }
+          return this.response;
+        });
     } catch (err) {
       throw new Error(err);
     }
   }
 
-  fetchScore() {
+  async fetchScore() {
+    if (!this.response.data.link) {
+      return new Error('No data link');
+    }
+
     try {
-      axios.get(this.MAIN_URL + this.response.data.link).then((res) => {
+      return axios.get(this.MAIN_URL + this.response.data.link).then((res) => {
         const gameReview = res.data.liveData.plays;
 
         gameReview.scoringPlays.forEach((play) => {
           const obsPlay = gameReview.allPlays[play];
-          const scoreStat = `🚨 ${obsPlay.about.goals.home}:${obsPlay.about.goals.away}`;
-          const goalScorer = ` — ${obsPlay.players[0].player.fullName} (${obsPlay.players[0].seasonTotal});`;
-          // const assists =
-          this.response.score.push(scoreStat + goalScorer);
+          const scorePlay = {
+            stat: `${obsPlay.about.goals.home}:${obsPlay.about.goals.away}`,
+            scorer: obsPlay.players[0].player.fullName,
+            scorerGoalsTotal: obsPlay.players[0].seasonTotal,
+            assistants: obsPlay.result.description.split('assists: ')[1] || '',
+          };
+          this.response.score.push(scorePlay);
         });
       });
     } catch (err) {
