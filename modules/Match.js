@@ -31,7 +31,7 @@ class Match {
     }
   }
 
-  async fetchScore() {
+  fetchScore() {
     if (!this.response.data.link) {
       return new Error('No data link');
     }
